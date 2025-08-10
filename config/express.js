@@ -12,7 +12,9 @@ import errorMiddleware from "middlewares/error.middleware.js";
 import authRouter from "features/authentication/authentication.routes.js";
 import spotifyRouter from "features/spotify/spotify.routes.js";
 import openApiRouter from "features/openAPI/openapi.routes.js";
+import { enviroment } from "constants/index.js";
 
+const { SERVER, ENV } = enviroment;
 const app = express();
 const mainApi = express();
 
@@ -20,7 +22,7 @@ const corsOptions = {
   origin: '*', // Allow all origins, adjust as needed for security
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   preflightContinue: false,
-  credentials: true, // Allow credentials if needed
+  credentials: true
 }
 
 app.use(helmet());
@@ -31,10 +33,10 @@ app.use(express.json());
 
 // Session middleware must come before passport initialization
 app.use(session({
-  secret: 'your-session-secret', // use a strong secret in production!
+  secret: SERVER.SESSION_SECRET, // use a strong secret in production!
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false } // set to true if using HTTPS
+  cookie: { secure: ENV.ISDEVELOPMENT ? false : true }
 }));
 
 // Passport middleware - must come after session

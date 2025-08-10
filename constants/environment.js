@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import dotenv from 'dotenv';
 
 const ENV_NAME = process.env.ENV_NAME || 'development';
@@ -19,7 +20,8 @@ const enviroment = {
     DIRECTORY: process.env.LOG_DIRECTORY || './logs'
   },
   SERVER: {
-    PORT: process.env.SERVER_PORT || 8080
+    PORT: process.env.SERVER_PORT || 8080,
+    SESSION_SECRET: process.env.SESSION_SECRET || randomUUID()
   }
 }
 

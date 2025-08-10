@@ -5,20 +5,6 @@ let httpServer;
 
 const { PORT } = enviroment.SERVER;
 
-const logServerStartMessage = () => {
-  console.info(`
- ____  _____ ______     _______ ____  
-/ ___|| ____|  _ \\ \\   / / ____|  _ \\ 
-\\___ \\|  _| | |_) \\ \\ / /|  _| | |_) |
- ___) | |___|  _ < \\ V / | |___|  _ < 
-|____/|_____|_| \\_\\ \\_/  |_____|_| \\_\\
- 
-————————————————————————————————————————————
-Server is running on http://localhost:8080
-————————————————————————————————————————————
-  `);
-}
-
 const killProcess = () => {
   logger.info('Shutting down the server gracefully...');
   if (httpServer) {
@@ -49,7 +35,7 @@ try {
   const express = await import('./config/express.js');
   const app = express.default;
 
-  httpServer = app.listen(PORT, logServerStartMessage);
+  httpServer = app.listen(PORT, logger.info(`Server is running on ${PORT}`));
 } catch (error) {
   logger.error(error, 'Error starting the server:');
 }
