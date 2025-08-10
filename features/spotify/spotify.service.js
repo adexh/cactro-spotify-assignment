@@ -134,6 +134,20 @@ const service = {
         err.message || 'Failed to get available devices'
       );
     }
+  },
+
+  resumePlayback: async (accessToken, deviceId = null) => {
+    try {
+      const spotifyClient = new SpotifyApiClient();
+      spotifyClient.setAccessToken(accessToken);
+
+      // Start playback without specifying tracks to resume current playback
+      return await spotifyClient.startPlayback([], deviceId);
+    } catch (err) {
+      throw new Error(
+        err.message || 'Failed to resume playback'
+      );
+    }
   }
 }
 

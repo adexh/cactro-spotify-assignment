@@ -11,6 +11,7 @@ import errorMiddleware from "middlewares/error.middleware.js";
 
 import authRouter from "features/authentication/authentication.routes.js";
 import spotifyRouter from "features/spotify/spotify.routes.js";
+import openApiRouter from "features/openAPI/openapi.routes.js";
 
 const app = express();
 const mainApi = express();
@@ -49,6 +50,8 @@ app.use('/api/v1', mainApi);
 mainApi.use('/auth', authRouter);
 
 mainApi.use('/spotify', spotifyRouter);
+
+mainApi.use('/openapi', openApiRouter);
 
 app.use(errorMiddleware.handleError);
 app.use(errorMiddleware.handleCriticalError);

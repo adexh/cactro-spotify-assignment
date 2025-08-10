@@ -481,6 +481,69 @@ class SpotifyOpenAPI {
           }
         }
       },
+      '/spotify/resume': {
+        get: {
+          summary: 'Resume current playback',
+          operationId: 'resumePlayback',
+          tags: ['Spotify'],
+          security: [
+            {
+              sessionAuth: []
+            }
+          ],
+          parameters: [
+            {
+              name: 'deviceId',
+              in: 'query',
+              required: false,
+              description: 'Optional device ID to resume playback on',
+              schema: { type: 'string' }
+            }
+          ],
+          responses: {
+            '200': {
+              description: 'Playback resumed',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      message: { type: 'string' }
+                    }
+                  }
+                }
+              }
+            },
+            '401': {
+              description: 'Not authenticated with Spotify',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      error: { type: 'string' }
+                    }
+                  }
+                }
+              }
+            },
+            '500': {
+              description: 'Internal server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      error: { type: 'string' }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       '/spotify/current-playback': {
         get: {
           summary: 'Get current playback information',
@@ -689,7 +752,7 @@ class SpotifyOpenAPI {
           }
         }
       },
-      '/spotify/openapi.json': {
+      '/openapi.json': {
         get: {
           summary: 'Get OpenAPI specification',
           operationId: 'getOpenApiSpec',
