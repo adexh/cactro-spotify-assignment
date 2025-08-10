@@ -21,8 +21,7 @@ const controller = {
       if (!accessToken) {
         return res.status(401).json({ error: 'Not authenticated with Spotify' });
       }
-
-      const { trackUri, deviceId } = req.body;
+      const { trackUri, deviceId } = req.query;
       if (!trackUri) {
         return res.status(400).json({ error: 'Track URI is required' });
       }
@@ -55,11 +54,7 @@ const controller = {
       if (!accessToken) {
         return res.status(401).json({ error: 'Not authenticated with Spotify' });
       }
-
-      const { songIndex, deviceId } = req.body;
-      if (!songIndex) {
-        return res.status(400).json({ error: 'Song index is required (1-10)' });
-      }
+      const { songIndex = 1, deviceId = null } = req.query;
 
       const result = await service.playTopSong(accessToken, parseInt(songIndex), deviceId);
       res.json(result);
@@ -74,8 +69,7 @@ const controller = {
       if (!accessToken) {
         return res.status(401).json({ error: 'Not authenticated with Spotify' });
       }
-
-      const { deviceId } = req.body;
+      const { deviceId } = req.query;
       const result = await service.pausePlayback(accessToken, deviceId);
       res.json(result);
     } catch (err) {
