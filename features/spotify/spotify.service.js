@@ -1,4 +1,3 @@
-// services/spotify.service.js
 import SpotifyApiClient from 'utils/spotify-api-client.js';
 
 const service = {
@@ -113,7 +112,6 @@ const service = {
       spotifyClient.setAccessToken(accessToken);
       const devicesResponse = await spotifyClient.getAvailableDevices();
 
-      // Transform the response to include only essential device information
       const devices = devicesResponse.devices.map(device => ({
         id: device.id,
         name: device.name,
@@ -141,7 +139,6 @@ const service = {
       const spotifyClient = new SpotifyApiClient();
       spotifyClient.setAccessToken(accessToken);
 
-      // Start playback without specifying tracks to resume current playback
       return await spotifyClient.startPlayback([], deviceId);
     } catch (err) {
       throw new Error(

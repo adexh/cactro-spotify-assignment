@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: express_app
     ports:
-      - "3000:3000" # host:container
+      - "8080:8080" # host:container
     environment:
       - NODE_ENV=production
       # - PORT=3000       # optional if your app reads from process.env.PORT

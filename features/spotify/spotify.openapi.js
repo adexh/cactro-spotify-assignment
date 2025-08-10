@@ -14,14 +14,13 @@ class SpotifyOpenAPI {
   }
 
   #initOpenAPISpec() {
-    // Server configuration
     this.servers = [
       {
         url: 'http://localhost:8080/api/v1',
         description: 'Development server'
       },
       {
-        url: 'https://your-domain.com/api/v1',
+        url: 'https://spotify.devrealm.in/api/v1',
         description: 'Production server'
       }
     ];
