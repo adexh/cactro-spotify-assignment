@@ -16,7 +16,7 @@ import { enviroment } from "constants/index.js";
 
 const { SERVER, ENV } = enviroment;
 const app = express();
-const mainApi = express();
+const api = express();
 
 const corsOptions = {
   origin: '*', // Allow all origins, adjust as needed for security
@@ -47,13 +47,13 @@ app.get('/health', (req, res) => {
   res.sendStatus(200);
 });
 
-app.use('/api/v1', mainApi);
+app.use('/api/v1', api);
 
-mainApi.use('/auth', authRouter);
+api.use('/auth', authRouter);
 
-mainApi.use('/spotify', spotifyRouter);
+api.use('/spotify', spotifyRouter);
 
-mainApi.use('/openapi', openApiRouter);
+api.use('/openapi', openApiRouter);
 
 app.use(errorMiddleware.handleError);
 app.use(errorMiddleware.handleCriticalError);
