@@ -23,7 +23,7 @@ const logger = pinoHttp({
       statusCode: res.statusCode,
     })
   },
-  level: isDevelopment ? 'info' : 'warn',
+  level: isDevelopment ? 'debug' : 'info',
 });
 
 export default logger;
