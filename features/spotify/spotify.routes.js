@@ -11,5 +11,7 @@ router.get('/play-top', controller.playTopSong);
 router.get('/pause', controller.pausePlayback);
 router.get('/current-playback', controller.getCurrentPlayback);
 router.get('/currently-playing', controller.getCurrentlyPlaying);
+router.get('/devices', controller.getAvailableDevices);
+router.get('/openapi.json', controller.getOpenApiSpec);
 
 export default router;

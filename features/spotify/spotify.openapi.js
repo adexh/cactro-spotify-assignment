@@ -211,7 +211,7 @@ class SpotifyOpenAPI {
         }
       },
       '/spotify/play': {
-        put: {
+        get: {
           summary: 'Play a song',
           operationId: 'playSong',
           tags: ['Spotify'],
@@ -220,22 +220,22 @@ class SpotifyOpenAPI {
               sessionAuth: []
             }
           ],
-          requestBody: {
-            description: 'Track details to play',
-            required: true,
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    trackUri: { type: 'string', description: 'Spotify track URI' },
-                    deviceId: { type: 'string', description: 'Optional device ID' }
-                  },
-                  required: ['trackUri']
-                }
-              }
+          parameters: [
+            {
+              name: 'trackUri',
+              in: 'query',
+              required: true,
+              description: 'Spotify track URI',
+              schema: { type: 'string' }
+            },
+            {
+              name: 'deviceId',
+              in: 'query',
+              required: false,
+              description: 'Optional device ID',
+              schema: { type: 'string' }
             }
-          },
+          ],
           responses: {
             '200': {
               description: 'Song started playing',
@@ -362,7 +362,7 @@ class SpotifyOpenAPI {
         }
       },
       '/spotify/play-top': {
-        put: {
+        get: {
           summary: 'Play a top song by index',
           operationId: 'playTopSong',
           tags: ['Spotify'],
@@ -371,22 +371,22 @@ class SpotifyOpenAPI {
               sessionAuth: []
             }
           ],
-          requestBody: {
-            description: 'Song index to play from top tracks',
-            required: true,
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    songIndex: { type: 'integer', description: 'Index of song to play (1-10)', minimum: 1, maximum: 10 },
-                    deviceId: { type: 'string', description: 'Optional device ID' }
-                  },
-                  required: ['songIndex']
-                }
-              }
+          parameters: [
+            {
+              name: 'songIndex',
+              in: 'query',
+              required: true,
+              description: 'Index of song to play (1-10)',
+              schema: { type: 'integer', minimum: 1, maximum: 10 }
+            },
+            {
+              name: 'deviceId',
+              in: 'query',
+              required: false,
+              description: 'Optional device ID',
+              schema: { type: 'string' }
             }
-          },
+          ],
           responses: {
             '200': {
               description: 'Top song started playing',
@@ -432,7 +432,7 @@ class SpotifyOpenAPI {
         }
       },
       '/spotify/pause': {
-        put: {
+        get: {
           summary: 'Pause playback',
           operationId: 'pausePlayback',
           tags: ['Spotify'],
@@ -441,20 +441,15 @@ class SpotifyOpenAPI {
               sessionAuth: []
             }
           ],
-          requestBody: {
-            description: 'Optional device ID',
-            required: false,
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    deviceId: { type: 'string', description: 'Optional device ID' }
-                  }
-                }
-              }
+          parameters: [
+            {
+              name: 'deviceId',
+              in: 'query',
+              required: false,
+              description: 'Optional device ID',
+              schema: { type: 'string' }
             }
-          },
+          ],
           responses: {
             '200': {
               description: 'Playback paused',
@@ -611,10 +606,138 @@ class SpotifyOpenAPI {
             }
           }
         }
+      },
+      '/spotify/devices': {
+        get: {
+          summary: 'Get available Spotify devices',
+          operationId: 'getAvailableDevices',
+          tags: ['Spotify'],
+          security: [
+            {
+              sessionAuth: []
+            }
+          ],
+          responses: {
+            '200': {
+              description: 'List of available Spotify devices',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      devices: {
+                        type: 'array',
+                        items: {
+                          type: 'object',
+                          properties: {
+                            id: { type: 'string', description: 'Device ID' },
+                            name: { type: 'string', description: 'Device name' },
+                            type: { type: 'string', description: 'Device type (Computer, Smartphone, etc.)' },
+                            is_active: { type: 'boolean', description: 'Whether the device is currently active' },
+                            is_private_session: { type: 'boolean', description: 'Whether the device is in a private session' },
+                            is_restricted: { type: 'boolean', description: 'Whether the device is restricted' },
+                            volume_percent: { type: 'integer', description: 'Volume level (0-100)', minimum: 0, maximum: 100 }
+                          }
+                        }
+                      },
+                      total: { type: 'integer', description: 'Total number of devices' },
+                      active_device: {
+                        type: 'object',
+                        nullable: true,
+                        description: 'Currently active device, if any',
+                        properties: {
+                          id: { type: 'string' },
+                          name: { type: 'string' },
+                          type: { type: 'string' },
+                          is_active: { type: 'boolean' },
+                          is_private_session: { type: 'boolean' },
+                          is_restricted: { type: 'boolean' },
+                          volume_percent: { type: 'integer' }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            '401': {
+              description: 'Not authenticated with Spotify',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      error: { type: 'string' }
+                    }
+                  }
+                }
+              }
+            },
+            '500': {
+              description: 'Internal server error',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      error: { type: 'string' }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      '/spotify/openapi.json': {
+        get: {
+          summary: 'Get OpenAPI specification',
+          operationId: 'getOpenApiSpec',
+          tags: ['Documentation'],
+          responses: {
+            '200': {
+              description: 'OpenAPI 3.0 specification',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    description: 'Complete OpenAPI 3.0 specification document'
+                  }
+                }
+              }
+            },
+            '404': {
+              description: 'OpenAPI specification file not found',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      error: { type: 'string' }
+                    }
+                  }
+                }
+              }
+            },
+            '500': {
+              description: 'Failed to load OpenAPI specification',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      error: { type: 'string' }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     };
 
-    this.tags = ['Authentication', 'Spotify'];
+    this.tags = ['Authentication', 'Spotify', 'Documentation'];
 
     this.components = {
       schemas: {
@@ -656,6 +779,18 @@ class SpotifyOpenAPI {
               items: { $ref: '#/components/schemas/Artist' }
             },
             uri: { type: 'string' }
+          }
+        },
+        Device: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', description: 'Device ID' },
+            name: { type: 'string', description: 'Device name' },
+            type: { type: 'string', description: 'Device type (Computer, Smartphone, etc.)' },
+            is_active: { type: 'boolean', description: 'Whether the device is currently active' },
+            is_private_session: { type: 'boolean', description: 'Whether the device is in a private session' },
+            is_restricted: { type: 'boolean', description: 'Whether the device is restricted' },
+            volume_percent: { type: 'integer', description: 'Volume level (0-100)', minimum: 0, maximum: 100 }
           }
         }
       },

@@ -225,7 +225,7 @@
       }
     },
     "/spotify/play": {
-      "put": {
+      "get": {
         "summary": "Play a song",
         "operationId": "playSong",
         "tags": [

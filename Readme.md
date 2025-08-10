@@ -160,6 +160,44 @@ Get currently playing track
 }
 ```
 
+#### `GET /spotify/devices`
+Get available Spotify devices
+- **Authentication**: Required
+- **Response**: List of available devices with IDs
+```json
+{
+  "devices": [
+    {
+      "id": "device_id_123",
+      "name": "My iPhone",
+      "type": "Smartphone",
+      "is_active": true,
+      "is_private_session": false,
+      "is_restricted": false,
+      "volume_percent": 80
+    }
+  ],
+  "total": 1,
+  "active_device": {
+    "id": "device_id_123",
+    "name": "My iPhone",
+    "type": "Smartphone",
+    "is_active": true,
+    "is_private_session": false,
+    "is_restricted": false,
+    "volume_percent": 80
+  }
+}
+```
+
+### Documentation Endpoints
+
+#### `GET /spotify/openapi.json`
+Get the complete OpenAPI 3.0 specification
+- **Authentication**: Not required
+- **Response**: Complete OpenAPI specification document
+- **Use case**: For API documentation tools, client generation, or API exploration
+
 ## Authentication
 This API uses session-based authentication with Spotify OAuth 2.0. Users must authenticate through the Spotify login flow before accessing protected endpoints.
 

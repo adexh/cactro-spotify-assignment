@@ -105,6 +105,35 @@ const service = {
         err.message || 'Failed to get currently playing track'
       );
     }
+  },
+
+  getAvailableDevices: async (accessToken) => {
+    try {
+      const spotifyClient = new SpotifyApiClient();
+      spotifyClient.setAccessToken(accessToken);
+      const devicesResponse = await spotifyClient.getAvailableDevices();
+
+      // Transform the response to include only essential device information
+      const devices = devicesResponse.devices.map(device => ({
+        id: device.id,
+        name: device.name,
+        type: device.type,
+        is_active: device.is_active,
+        is_private_session: device.is_private_session,
+        is_restricted: device.is_restricted,
+        volume_percent: device.volume_percent
+      }));
+
+      return {
+        devices,
+        total: devices.length,
+        active_device: devices.find(device => device.is_active) || null
+      };
+    } catch (err) {
+      throw new Error(
+        err.message || 'Failed to get available devices'
+      );
+    }
   }
 }
 
