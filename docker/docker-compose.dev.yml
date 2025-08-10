@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: test
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: express_app_dev
+    ports:
+      - "3000:3000"
+    environment:
+      - ENV_NAME=development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+    restart: always
+    networks:
+      - app-network
+  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    ports:
+      - "16686:16686" # Web UI
+      - "14268:14268" # HTTP Thrift (for OTEL HTTP exporter)
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+    restart: always
+
+volumes:
+  db_data: {}
+
+networks:
+  app-network:
+    driver: bridge

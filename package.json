@@ -1,0 +1,65 @@
+{
+  "name": "express-backend-boilerplate",
+  "version": "1.0.0",
+  "description": "This is a boilerplate code for a production ready express app",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "start": "node -r ./config/tracing.cjs index.js",
+    "dev": "nodemon -r ./config/tracing.js index.js",
+    "openapi:init": "node scripts/generate.openapi.js",
+    "dock:build": "docker build -f docker/Dockerfile -t express-app .",
+    "dock:run": "docker run --rm -p 3000:3000 express-app",
+    "dockcomp:up": "docker-compose -f docker/docker-compose.yml up --build",
+    "dockcomp:down": "docker-compose -f docker/docker-compose.yml down",
+    "dockcomp:devup": "docker-compose -f docker/docker-compose.dev.yml up --build",
+    "dockcomp:devdown": "docker-compose -f docker/docker-compose.dev.yml down"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adexh/express-backend-boilerplate.git"
+  },
+  "author": "Adesh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adexh/express-backend-boilerplate/issues"
+  },
+  "homepage": "https://github.com/adexh/express-backend-boilerplate#readme",
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.62.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.203.0",
+    "@opentelemetry/instrumentation-express": "^0.52.0",
+    "@opentelemetry/sdk-node": "^0.203.0",
+    "axios": "^1.11.0",
+    "compression": "^1.8.1",
+    "config": "file:./config",
+    "constants": "file:./constants",
+    "cors": "^2.8.5",
+    "database": "file:./database",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "features": "file:./features",
+    "file-stream-rotator": "^1.0.0",
+    "helmet": "^8.1.0",
+    "middlewares": "file:./middlewares",
+    "passport": "^0.7.0",
+    "passport-spotify": "^2.0.0",
+    "pg": "^8.16.3",
+    "pino-http": "^10.5.0",
+    "pino-pretty": "^13.1.1",
+    "types": "file:./@types",
+    "utils": "file:./utils"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "eslint": "^9.32.0",
+    "globals": "^16.3.0",
+    "jest": "^30.0.5",
+    "prettier": "^3.6.2"
+  }
+}
